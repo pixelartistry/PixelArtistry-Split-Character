@@ -1,0 +1,590 @@
+{
+ "id": "5b2f0e1e-7c1a-4f4e-9d3a-split-qwen21",
+ "revision": 0,
+ "last_node_id": 10,
+ "last_link_id": 11,
+ "nodes": [
+  {
+   "id": 1,
+   "type": "UNETLoader",
+   "pos": [
+    40,
+    120
+   ],
+   "size": [
+    420,
+    90
+   ],
+   "flags": {},
+   "order": 0,
+   "mode": 0,
+   "inputs": [],
+   "outputs": [
+    {
+     "localized_name": "MODEL",
+     "name": "MODEL",
+     "type": "MODEL",
+     "links": [
+      1
+     ]
+    }
+   ],
+   "properties": {
+    "cnr_id": "comfy-core",
+    "ver": "0.39.2",
+    "Node name for S&R": "UNETLoader"
+   },
+   "widgets_values": [
+    "qwen_image_2.1_int8_convrot.safetensors",
+    "default"
+   ]
+  },
+  {
+   "id": 2,
+   "type": "CLIPLoader",
+   "pos": [
+    40,
+    250
+   ],
+   "size": [
+    420,
+    110
+   ],
+   "flags": {},
+   "order": 1,
+   "mode": 0,
+   "inputs": [],
+   "outputs": [
+    {
+     "localized_name": "CLIP",
+     "name": "CLIP",
+     "type": "CLIP",
+     "links": [
+      2
+     ]
+    }
+   ],
+   "properties": {
+    "cnr_id": "comfy-core",
+    "ver": "0.39.2",
+    "Node name for S&R": "CLIPLoader"
+   },
+   "widgets_values": [
+    "qwen3vl_8b_int8_convrot.safetensors",
+    "qwen_image",
+    "default"
+   ]
+  },
+  {
+   "id": 3,
+   "type": "VAELoader",
+   "pos": [
+    40,
+    400
+   ],
+   "size": [
+    420,
+    60
+   ],
+   "flags": {},
+   "order": 2,
+   "mode": 0,
+   "inputs": [],
+   "outputs": [
+    {
+     "localized_name": "VAE",
+     "name": "VAE",
+     "type": "VAE",
+     "links": [
+      4,
+      10
+     ]
+    }
+   ],
+   "properties": {
+    "cnr_id": "comfy-core",
+    "ver": "0.39.2",
+    "Node name for S&R": "VAELoader"
+   },
+   "widgets_values": [
+    "qwen_image_2.1_vae_bf16.safetensors"
+   ]
+  },
+  {
+   "id": 4,
+   "type": "QwenImage21Cache",
+   "pos": [
+    500,
+    120
+   ],
+   "size": [
+    270,
+    90
+   ],
+   "flags": {},
+   "order": 4,
+   "mode": 0,
+   "inputs": [
+    {
+     "localized_name": "model",
+     "name": "model",
+     "type": "MODEL",
+     "link": 1
+    }
+   ],
+   "outputs": [
+    {
+     "localized_name": "MODEL",
+     "name": "MODEL",
+     "type": "MODEL",
+     "links": [
+      5
+     ]
+    }
+   ],
+   "properties": {
+    "cnr_id": "comfy-core",
+    "ver": "0.39.2",
+    "Node name for S&R": "QwenImage21Cache"
+   },
+   "widgets_values": [
+    "auto",
+    "default"
+   ]
+  },
+  {
+   "id": 5,
+   "type": "LoadImage",
+   "pos": [
+    40,
+    560
+   ],
+   "size": [
+    420,
+    460
+   ],
+   "flags": {},
+   "order": 3,
+   "mode": 0,
+   "inputs": [],
+   "outputs": [
+    {
+     "localized_name": "IMAGE",
+     "name": "IMAGE",
+     "type": "IMAGE",
+     "links": [
+      3
+     ]
+    },
+    {
+     "localized_name": "MASK",
+     "name": "MASK",
+     "type": "MASK",
+     "links": []
+    }
+   ],
+   "properties": {
+    "cnr_id": "comfy-core",
+    "ver": "0.39.2",
+    "Node name for S&R": "LoadImage"
+   },
+   "widgets_values": [
+    "example_head_crop.png",
+    "image"
+   ]
+  },
+  {
+   "id": 6,
+   "type": "TextEncodeQwenImage21",
+   "pos": [
+    500,
+    560
+   ],
+   "size": [
+    520,
+    460
+   ],
+   "flags": {},
+   "order": 5,
+   "mode": 0,
+   "inputs": [
+    {
+     "localized_name": "clip",
+     "name": "clip",
+     "type": "CLIP",
+     "link": 2
+    },
+    {
+     "localized_name": "image_1",
+     "name": "images.image_1",
+     "type": "IMAGE",
+     "link": 3,
+     "shape": 7
+    },
+    {
+     "localized_name": "vae",
+     "name": "vae",
+     "type": "VAE",
+     "link": 4,
+     "shape": 7
+    }
+   ],
+   "outputs": [
+    {
+     "localized_name": "positive",
+     "name": "positive",
+     "type": "CONDITIONING",
+     "links": [
+      6
+     ]
+    },
+    {
+     "localized_name": "negative",
+     "name": "negative",
+     "type": "CONDITIONING",
+     "links": [
+      7
+     ]
+    },
+    {
+     "localized_name": "latent",
+     "name": "latent",
+     "type": "LATENT",
+     "links": [
+      8
+     ]
+    }
+   ],
+   "properties": {
+    "cnr_id": "comfy-core",
+    "ver": "0.39.2",
+    "Node name for S&R": "TextEncodeQwenImage21"
+   },
+   "widgets_values": [
+    "Edit this image. Show only the head of this cyclops ogre with his complete beard and his thick neck, isolated on a plain white background. Include: the bald grey head with the red scar, the single orange eye, the brow, the nose, both pointed ears, the two tusks, and the whole full bushy grey-black beard with its curly grey strands, exactly as long and as wide as in this image: it covers the throat and ends in a rounded tip at the top of the chest, where it ends in this image, no longer and no shorter, and it is not cut off flat. On both sides of the beard, show the thick grey neck down to where it meets the shoulders; the neck ends there in a clean cut. Remove the shoulders, the trapezius muscles, the chest and the rest of the body completely. Keep the face exactly the same: the same single centred eye (exactly one eye), the same scar, wrinkles, skin colour, beard colour and expression. Strict front view, face dead-on to the camera, no head tilt, the whole head, beard and neck centred with an empty white margin around them. Same realistic 3D render style, soft even studio light, sharp high detail.",
+    "",
+    1024
+   ]
+  },
+  {
+   "id": 7,
+   "type": "KSampler",
+   "pos": [
+    1060,
+    560
+   ],
+   "size": [
+    300,
+    270
+   ],
+   "flags": {},
+   "order": 6,
+   "mode": 0,
+   "inputs": [
+    {
+     "localized_name": "model",
+     "name": "model",
+     "type": "MODEL",
+     "link": 5
+    },
+    {
+     "localized_name": "positive",
+     "name": "positive",
+     "type": "CONDITIONING",
+     "link": 6
+    },
+    {
+     "localized_name": "negative",
+     "name": "negative",
+     "type": "CONDITIONING",
+     "link": 7
+    },
+    {
+     "localized_name": "latent_image",
+     "name": "latent_image",
+     "type": "LATENT",
+     "link": 8
+    }
+   ],
+   "outputs": [
+    {
+     "localized_name": "LATENT",
+     "name": "LATENT",
+     "type": "LATENT",
+     "links": [
+      9
+     ]
+    }
+   ],
+   "properties": {
+    "cnr_id": "comfy-core",
+    "ver": "0.39.2",
+    "Node name for S&R": "KSampler"
+   },
+   "widgets_values": [
+    56,
+    "fixed",
+    25,
+    1,
+    "euler",
+    "simple",
+    1
+   ]
+  },
+  {
+   "id": 8,
+   "type": "VAEDecode",
+   "pos": [
+    1060,
+    870
+   ],
+   "size": [
+    220,
+    50
+   ],
+   "flags": {},
+   "order": 7,
+   "mode": 0,
+   "inputs": [
+    {
+     "localized_name": "samples",
+     "name": "samples",
+     "type": "LATENT",
+     "link": 9
+    },
+    {
+     "localized_name": "vae",
+     "name": "vae",
+     "type": "VAE",
+     "link": 10
+    }
+   ],
+   "outputs": [
+    {
+     "localized_name": "IMAGE",
+     "name": "IMAGE",
+     "type": "IMAGE",
+     "links": [
+      11
+     ]
+    }
+   ],
+   "properties": {
+    "cnr_id": "comfy-core",
+    "ver": "0.39.2",
+    "Node name for S&R": "VAEDecode"
+   },
+   "widgets_values": []
+  },
+  {
+   "id": 9,
+   "type": "SaveImage",
+   "pos": [
+    1400,
+    560
+   ],
+   "size": [
+    460,
+    560
+   ],
+   "flags": {},
+   "order": 8,
+   "mode": 0,
+   "inputs": [
+    {
+     "localized_name": "images",
+     "name": "images",
+     "type": "IMAGE",
+     "link": 11
+    }
+   ],
+   "outputs": [],
+   "properties": {
+    "cnr_id": "comfy-core",
+    "ver": "0.39.2",
+    "Node name for S&R": "SaveImage"
+   },
+   "widgets_values": [
+    "split_parts/part"
+   ]
+  },
+  {
+   "id": 10,
+   "type": "MarkdownNote",
+   "pos": [
+    500,
+    250
+   ],
+   "size": [
+    520,
+    300
+   ],
+   "flags": {},
+   "order": 9,
+   "mode": 0,
+   "inputs": [],
+   "outputs": [],
+   "properties": {},
+   "color": "#432",
+   "bgcolor": "#653",
+   "widgets_values": [
+    "### PixelArtistry · Split a character into parts (Qwen Image 2.1 edit)\n\n1. Crop **one part** from your character image (head, body, cloth, arm, leg) and load it in **Load Image**.\n2. Paste the matching prompt from `prompts/` and adjust it to your character.\n3. Run. The output keeps the input's size and camera.\n\n- The crop goes into `image_1` of *Text Encode Qwen Image 2.1*; its latent sets the size.\n- Seed **56** (fixed), 25 steps, cfg 1, euler / simple. Reference resolution 1024 (1536 for the full body).\n- Prompt pattern: *what to keep* + *what to remove* + *strict front view, plain white background*.\n- Each part should bring what hides its seam: the whole beard for the head, the wrap for arms and legs."
+   ]
+  }
+ ],
+ "links": [
+  [
+   1,
+   1,
+   0,
+   4,
+   0,
+   "MODEL"
+  ],
+  [
+   2,
+   2,
+   0,
+   6,
+   0,
+   "CLIP"
+  ],
+  [
+   3,
+   5,
+   0,
+   6,
+   1,
+   "IMAGE"
+  ],
+  [
+   4,
+   3,
+   0,
+   6,
+   2,
+   "VAE"
+  ],
+  [
+   5,
+   4,
+   0,
+   7,
+   0,
+   "MODEL"
+  ],
+  [
+   6,
+   6,
+   0,
+   7,
+   1,
+   "CONDITIONING"
+  ],
+  [
+   7,
+   6,
+   1,
+   7,
+   2,
+   "CONDITIONING"
+  ],
+  [
+   8,
+   6,
+   2,
+   7,
+   3,
+   "LATENT"
+  ],
+  [
+   9,
+   7,
+   0,
+   8,
+   0,
+   "LATENT"
+  ],
+  [
+   10,
+   3,
+   0,
+   8,
+   1,
+   "VAE"
+  ],
+  [
+   11,
+   8,
+   0,
+   9,
+   0,
+   "IMAGE"
+  ]
+ ],
+ "groups": [
+  {
+   "id": 1,
+   "title": "1 · Models (Qwen Image 2.1)",
+   "bounding": [
+    20,
+    40,
+    770,
+    440
+   ],
+   "color": "#3f789e",
+   "font_size": 24,
+   "flags": {}
+  },
+  {
+   "id": 2,
+   "title": "2 · Input part crop",
+   "bounding": [
+    20,
+    490,
+    460,
+    550
+   ],
+   "color": "#8A8",
+   "font_size": 24,
+   "flags": {}
+  },
+  {
+   "id": 3,
+   "title": "3 · Edit prompt",
+   "bounding": [
+    490,
+    490,
+    550,
+    550
+   ],
+   "color": "#b06634",
+   "font_size": 24,
+   "flags": {}
+  },
+  {
+   "id": 4,
+   "title": "4 · Sample + save (seed 56)",
+   "bounding": [
+    1050,
+    490,
+    830,
+    650
+   ],
+   "color": "#a1309b",
+   "font_size": 24,
+   "flags": {}
+  }
+ ],
+ "config": {},
+ "extra": {
+  "ds": {
+   "scale": 0.75,
+   "offset": [
+    40,
+    40
+   ]
+  }
+ },
+ "version": 0.4
+}
