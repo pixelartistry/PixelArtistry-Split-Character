@@ -2,7 +2,7 @@
 
 Free & local ComfyUI workflows: split **one character image** into parts with **Qwen Image 2.1**, turn each part into a textured low-poly mesh with **TRELLIS.2 + UltraTex**, and assemble them in Blender. A part that fills the whole image gets the full resolution of the 3D model and the texture – the face especially comes out much sharper than in a one-shot run.
 
-![One-shot TRELLIS.2 (left) vs the split character (right)](images/before_after.png)
+![One-shot TRELLIS.2 (left) vs the split character (right), with the faces close up](images/before_after.png)
 
 ```
 character image ──► crop a part ──► Qwen Image 2.1 edit ──► isolated part (front view, white background)
