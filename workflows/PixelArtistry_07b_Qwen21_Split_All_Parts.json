@@ -1,0 +1,2189 @@
+{
+ "id": "3a7c9e21-5d4b-4f8a-b6c2-split-all-parts",
+ "revision": 0,
+ "last_node_id": 34,
+ "last_link_id": 59,
+ "nodes": [
+  {
+   "id": 1,
+   "type": "UNETLoader",
+   "pos": [
+    40,
+    120
+   ],
+   "size": [
+    420,
+    90
+   ],
+   "flags": {},
+   "order": 1,
+   "mode": 0,
+   "inputs": [],
+   "outputs": [
+    {
+     "localized_name": "MODEL",
+     "name": "MODEL",
+     "type": "MODEL",
+     "links": [
+      1
+     ]
+    }
+   ],
+   "properties": {
+    "cnr_id": "comfy-core",
+    "ver": "0.39.2",
+    "Node name for S&R": "UNETLoader"
+   },
+   "widgets_values": [
+    "qwen_image_2.1_int8_convrot.safetensors",
+    "default"
+   ]
+  },
+  {
+   "id": 2,
+   "type": "CLIPLoader",
+   "pos": [
+    40,
+    250
+   ],
+   "size": [
+    420,
+    110
+   ],
+   "flags": {},
+   "order": 2,
+   "mode": 0,
+   "inputs": [],
+   "outputs": [
+    {
+     "localized_name": "CLIP",
+     "name": "CLIP",
+     "type": "CLIP",
+     "links": [
+      2,
+      14,
+      26,
+      38,
+      50
+     ]
+    }
+   ],
+   "properties": {
+    "cnr_id": "comfy-core",
+    "ver": "0.39.2",
+    "Node name for S&R": "CLIPLoader"
+   },
+   "widgets_values": [
+    "qwen3vl_8b_int8_convrot.safetensors",
+    "qwen_image",
+    "default"
+   ]
+  },
+  {
+   "id": 3,
+   "type": "VAELoader",
+   "pos": [
+    40,
+    400
+   ],
+   "size": [
+    420,
+    60
+   ],
+   "flags": {},
+   "order": 3,
+   "mode": 0,
+   "inputs": [],
+   "outputs": [
+    {
+     "localized_name": "VAE",
+     "name": "VAE",
+     "type": "VAE",
+     "links": [
+      4,
+      10,
+      16,
+      22,
+      28,
+      34,
+      40,
+      46,
+      52,
+      58
+     ]
+    }
+   ],
+   "properties": {
+    "cnr_id": "comfy-core",
+    "ver": "0.39.2",
+    "Node name for S&R": "VAELoader"
+   },
+   "widgets_values": [
+    "qwen_image_2.1_vae_bf16.safetensors"
+   ]
+  },
+  {
+   "id": 4,
+   "type": "QwenImage21Cache",
+   "pos": [
+    40,
+    500
+   ],
+   "size": [
+    270,
+    90
+   ],
+   "flags": {},
+   "order": 4,
+   "mode": 0,
+   "inputs": [
+    {
+     "localized_name": "model",
+     "name": "model",
+     "type": "MODEL",
+     "link": 1
+    }
+   ],
+   "outputs": [
+    {
+     "localized_name": "MODEL",
+     "name": "MODEL",
+     "type": "MODEL",
+     "links": [
+      5,
+      17,
+      29,
+      41,
+      53
+     ]
+    }
+   ],
+   "properties": {
+    "cnr_id": "comfy-core",
+    "ver": "0.39.2",
+    "Node name for S&R": "QwenImage21Cache"
+   },
+   "widgets_values": [
+    "auto",
+    "default"
+   ]
+  },
+  {
+   "id": 5,
+   "type": "LoadImage",
+   "pos": [
+    40,
+    680
+   ],
+   "size": [
+    420,
+    620
+   ],
+   "flags": {},
+   "order": 5,
+   "mode": 0,
+   "inputs": [],
+   "outputs": [
+    {
+     "localized_name": "IMAGE",
+     "name": "IMAGE",
+     "type": "IMAGE",
+     "links": [
+      3,
+      12,
+      24,
+      36,
+      48
+     ]
+    },
+    {
+     "localized_name": "MASK",
+     "name": "MASK",
+     "type": "MASK",
+     "links": []
+    }
+   ],
+   "properties": {
+    "cnr_id": "comfy-core",
+    "ver": "0.39.2",
+    "Node name for S&R": "LoadImage"
+   },
+   "widgets_values": [
+    "source_cyclops.png",
+    "image"
+   ],
+   "title": "Load the FULL character image"
+  },
+  {
+   "id": 6,
+   "type": "MarkdownNote",
+   "pos": [
+    40,
+    1340
+   ],
+   "size": [
+    420,
+    420
+   ],
+   "flags": {},
+   "order": 6,
+   "mode": 0,
+   "inputs": [],
+   "outputs": [],
+   "properties": {},
+   "widgets_values": [
+    "### Split a character into parts (Qwen Image 2.1)\n\nLoad the **full character image** once. Each row crops one part with **Image Crop** and isolates it with a Qwen Image 2.1 edit.\n\n**Image Crop** = `width`, `height`, `x`, `y` in pixels of the source (top-left is 0, 0). The boxes fit the example `source_cyclops.png` (1664 × 2480). For your own character, read the box from your image (hover in any image viewer) and leave a generous margin.\n\n**Rule:** each part brings what hides its seam: the whole beard for the head, the wrap for arms and legs. One arm and one leg are enough, mirror them in Blender.\n\nSeed 56 fixed, 25 steps, cfg 1, euler / simple. Body at 1536, parts at 1024. Mute a row (Ctrl+M) to skip a part."
+   ],
+   "color": "#432",
+   "bgcolor": "#653"
+  },
+  {
+   "id": 7,
+   "type": "TextEncodeQwenImage21",
+   "pos": [
+    830,
+    120
+   ],
+   "size": [
+    520,
+    440
+   ],
+   "flags": {},
+   "order": 7,
+   "mode": 0,
+   "inputs": [
+    {
+     "localized_name": "clip",
+     "name": "clip",
+     "type": "CLIP",
+     "link": 2
+    },
+    {
+     "localized_name": "image_1",
+     "name": "images.image_1",
+     "type": "IMAGE",
+     "link": 3,
+     "shape": 7
+    },
+    {
+     "localized_name": "vae",
+     "name": "vae",
+     "type": "VAE",
+     "link": 4,
+     "shape": 7
+    }
+   ],
+   "outputs": [
+    {
+     "localized_name": "positive",
+     "name": "positive",
+     "type": "CONDITIONING",
+     "links": [
+      6
+     ]
+    },
+    {
+     "localized_name": "negative",
+     "name": "negative",
+     "type": "CONDITIONING",
+     "links": [
+      7
+     ]
+    },
+    {
+     "localized_name": "latent",
+     "name": "latent",
+     "type": "LATENT",
+     "links": [
+      8
+     ]
+    }
+   ],
+   "properties": {
+    "cnr_id": "comfy-core",
+    "ver": "0.39.2",
+    "Node name for S&R": "TextEncodeQwenImage21"
+   },
+   "widgets_values": [
+    "Edit this image. Remove the whole loincloth: the leather flaps, the braided rope belt and the fang pendant. In its place the ogre wears short, tight dark brown leather shorts that hug his hips and upper thighs closely and end well above the knees, with no flaps, nothing hanging between the legs and nothing loose. The inner thighs and the gap between the legs are clearly visible. Also remove the two small arrow stubs sticking out of his shoulders, leaving plain grey skin there. Keep everything else exactly the same: the same grey cyclops ogre, his head, single eye, tusks, beard and scars, the same body proportions, the same pose with arms angled out and open empty hands, legs apart, the same leather wraps on both forearms and both shins, the same bare feet, the same strict front camera and framing, the same plain white background, the same realistic 3D render style and lighting.",
+    "",
+    1536
+   ]
+  },
+  {
+   "id": 8,
+   "type": "KSampler",
+   "pos": [
+    1380,
+    120
+   ],
+   "size": [
+    280,
+    270
+   ],
+   "flags": {},
+   "order": 8,
+   "mode": 0,
+   "inputs": [
+    {
+     "localized_name": "model",
+     "name": "model",
+     "type": "MODEL",
+     "link": 5
+    },
+    {
+     "localized_name": "positive",
+     "name": "positive",
+     "type": "CONDITIONING",
+     "link": 6
+    },
+    {
+     "localized_name": "negative",
+     "name": "negative",
+     "type": "CONDITIONING",
+     "link": 7
+    },
+    {
+     "localized_name": "latent_image",
+     "name": "latent_image",
+     "type": "LATENT",
+     "link": 8
+    }
+   ],
+   "outputs": [
+    {
+     "localized_name": "LATENT",
+     "name": "LATENT",
+     "type": "LATENT",
+     "links": [
+      9
+     ]
+    }
+   ],
+   "properties": {
+    "cnr_id": "comfy-core",
+    "ver": "0.39.2",
+    "Node name for S&R": "KSampler"
+   },
+   "widgets_values": [
+    56,
+    "fixed",
+    25,
+    1,
+    "euler",
+    "simple",
+    1
+   ]
+  },
+  {
+   "id": 9,
+   "type": "VAEDecode",
+   "pos": [
+    1380,
+    430
+   ],
+   "size": [
+    220,
+    50
+   ],
+   "flags": {},
+   "order": 9,
+   "mode": 0,
+   "inputs": [
+    {
+     "localized_name": "samples",
+     "name": "samples",
+     "type": "LATENT",
+     "link": 9
+    },
+    {
+     "localized_name": "vae",
+     "name": "vae",
+     "type": "VAE",
+     "link": 10
+    }
+   ],
+   "outputs": [
+    {
+     "localized_name": "IMAGE",
+     "name": "IMAGE",
+     "type": "IMAGE",
+     "links": [
+      11
+     ]
+    }
+   ],
+   "properties": {
+    "cnr_id": "comfy-core",
+    "ver": "0.39.2",
+    "Node name for S&R": "VAEDecode"
+   },
+   "widgets_values": []
+  },
+  {
+   "id": 10,
+   "type": "SaveImage",
+   "pos": [
+    1690,
+    120
+   ],
+   "size": [
+    380,
+    440
+   ],
+   "flags": {},
+   "order": 10,
+   "mode": 0,
+   "inputs": [
+    {
+     "localized_name": "images",
+     "name": "images",
+     "type": "IMAGE",
+     "link": 11
+    }
+   ],
+   "outputs": [],
+   "properties": {
+    "cnr_id": "comfy-core",
+    "ver": "0.39.2",
+    "Node name for S&R": "SaveImage"
+   },
+   "widgets_values": [
+    "split_parts/body"
+   ]
+  },
+  {
+   "id": 11,
+   "type": "ImageCrop",
+   "pos": [
+    540,
+    680
+   ],
+   "size": [
+    260,
+    130
+   ],
+   "flags": {},
+   "order": 11,
+   "mode": 0,
+   "inputs": [
+    {
+     "localized_name": "image",
+     "name": "image",
+     "type": "IMAGE",
+     "link": 12
+    }
+   ],
+   "outputs": [
+    {
+     "localized_name": "IMAGE",
+     "name": "IMAGE",
+     "type": "IMAGE",
+     "links": [
+      13,
+      15
+     ]
+    }
+   ],
+   "properties": {
+    "cnr_id": "comfy-core",
+    "ver": "0.39.2",
+    "Node name for S&R": "ImageCrop"
+   },
+   "widgets_values": [
+    600,
+    600,
+    530,
+    0
+   ],
+   "title": "Crop · Head with the whole beard"
+  },
+  {
+   "id": 12,
+   "type": "PreviewImage",
+   "pos": [
+    540,
+    840
+   ],
+   "size": [
+    260,
+    280
+   ],
+   "flags": {},
+   "order": 12,
+   "mode": 0,
+   "inputs": [
+    {
+     "localized_name": "images",
+     "name": "images",
+     "type": "IMAGE",
+     "link": 13
+    }
+   ],
+   "outputs": [],
+   "properties": {
+    "cnr_id": "comfy-core",
+    "ver": "0.39.2",
+    "Node name for S&R": "PreviewImage"
+   },
+   "widgets_values": [],
+   "title": "Crop preview"
+  },
+  {
+   "id": 13,
+   "type": "TextEncodeQwenImage21",
+   "pos": [
+    830,
+    680
+   ],
+   "size": [
+    520,
+    440
+   ],
+   "flags": {},
+   "order": 13,
+   "mode": 0,
+   "inputs": [
+    {
+     "localized_name": "clip",
+     "name": "clip",
+     "type": "CLIP",
+     "link": 14
+    },
+    {
+     "localized_name": "image_1",
+     "name": "images.image_1",
+     "type": "IMAGE",
+     "link": 15,
+     "shape": 7
+    },
+    {
+     "localized_name": "vae",
+     "name": "vae",
+     "type": "VAE",
+     "link": 16,
+     "shape": 7
+    }
+   ],
+   "outputs": [
+    {
+     "localized_name": "positive",
+     "name": "positive",
+     "type": "CONDITIONING",
+     "links": [
+      18
+     ]
+    },
+    {
+     "localized_name": "negative",
+     "name": "negative",
+     "type": "CONDITIONING",
+     "links": [
+      19
+     ]
+    },
+    {
+     "localized_name": "latent",
+     "name": "latent",
+     "type": "LATENT",
+     "links": [
+      20
+     ]
+    }
+   ],
+   "properties": {
+    "cnr_id": "comfy-core",
+    "ver": "0.39.2",
+    "Node name for S&R": "TextEncodeQwenImage21"
+   },
+   "widgets_values": [
+    "Edit this image. Show only the head of this cyclops ogre with his complete beard and his thick neck, isolated on a plain white background. Include: the bald grey head with the red scar, the single orange eye, the brow, the nose, both pointed ears, the two tusks, and the whole full bushy grey-black beard with its curly grey strands, exactly as long and as wide as in this image: it covers the throat and ends in a rounded tip at the top of the chest, where it ends in this image, no longer and no shorter, and it is not cut off flat. On both sides of the beard, show the thick grey neck down to where it meets the shoulders; the neck ends there in a clean cut. Remove the shoulders, the trapezius muscles, the chest and the rest of the body completely. Keep the face exactly the same: the same single centred eye (exactly one eye), the same scar, wrinkles, skin colour, beard colour and expression. Strict front view, face dead-on to the camera, no head tilt, the whole head, beard and neck centred with an empty white margin around them. Same realistic 3D render style, soft even studio light, sharp high detail.",
+    "",
+    1024
+   ]
+  },
+  {
+   "id": 14,
+   "type": "KSampler",
+   "pos": [
+    1380,
+    680
+   ],
+   "size": [
+    280,
+    270
+   ],
+   "flags": {},
+   "order": 14,
+   "mode": 0,
+   "inputs": [
+    {
+     "localized_name": "model",
+     "name": "model",
+     "type": "MODEL",
+     "link": 17
+    },
+    {
+     "localized_name": "positive",
+     "name": "positive",
+     "type": "CONDITIONING",
+     "link": 18
+    },
+    {
+     "localized_name": "negative",
+     "name": "negative",
+     "type": "CONDITIONING",
+     "link": 19
+    },
+    {
+     "localized_name": "latent_image",
+     "name": "latent_image",
+     "type": "LATENT",
+     "link": 20
+    }
+   ],
+   "outputs": [
+    {
+     "localized_name": "LATENT",
+     "name": "LATENT",
+     "type": "LATENT",
+     "links": [
+      21
+     ]
+    }
+   ],
+   "properties": {
+    "cnr_id": "comfy-core",
+    "ver": "0.39.2",
+    "Node name for S&R": "KSampler"
+   },
+   "widgets_values": [
+    56,
+    "fixed",
+    25,
+    1,
+    "euler",
+    "simple",
+    1
+   ]
+  },
+  {
+   "id": 15,
+   "type": "VAEDecode",
+   "pos": [
+    1380,
+    990
+   ],
+   "size": [
+    220,
+    50
+   ],
+   "flags": {},
+   "order": 15,
+   "mode": 0,
+   "inputs": [
+    {
+     "localized_name": "samples",
+     "name": "samples",
+     "type": "LATENT",
+     "link": 21
+    },
+    {
+     "localized_name": "vae",
+     "name": "vae",
+     "type": "VAE",
+     "link": 22
+    }
+   ],
+   "outputs": [
+    {
+     "localized_name": "IMAGE",
+     "name": "IMAGE",
+     "type": "IMAGE",
+     "links": [
+      23
+     ]
+    }
+   ],
+   "properties": {
+    "cnr_id": "comfy-core",
+    "ver": "0.39.2",
+    "Node name for S&R": "VAEDecode"
+   },
+   "widgets_values": []
+  },
+  {
+   "id": 16,
+   "type": "SaveImage",
+   "pos": [
+    1690,
+    680
+   ],
+   "size": [
+    380,
+    440
+   ],
+   "flags": {},
+   "order": 16,
+   "mode": 0,
+   "inputs": [
+    {
+     "localized_name": "images",
+     "name": "images",
+     "type": "IMAGE",
+     "link": 23
+    }
+   ],
+   "outputs": [],
+   "properties": {
+    "cnr_id": "comfy-core",
+    "ver": "0.39.2",
+    "Node name for S&R": "SaveImage"
+   },
+   "widgets_values": [
+    "split_parts/head"
+   ]
+  },
+  {
+   "id": 17,
+   "type": "ImageCrop",
+   "pos": [
+    540,
+    1240
+   ],
+   "size": [
+    260,
+    130
+   ],
+   "flags": {},
+   "order": 17,
+   "mode": 0,
+   "inputs": [
+    {
+     "localized_name": "image",
+     "name": "image",
+     "type": "IMAGE",
+     "link": 24
+    }
+   ],
+   "outputs": [
+    {
+     "localized_name": "IMAGE",
+     "name": "IMAGE",
+     "type": "IMAGE",
+     "links": [
+      25,
+      27
+     ]
+    }
+   ],
+   "properties": {
+    "cnr_id": "comfy-core",
+    "ver": "0.39.2",
+    "Node name for S&R": "ImageCrop"
+   },
+   "widgets_values": [
+    910,
+    1010,
+    380,
+    900
+   ],
+   "title": "Crop · Loincloth"
+  },
+  {
+   "id": 18,
+   "type": "PreviewImage",
+   "pos": [
+    540,
+    1400
+   ],
+   "size": [
+    260,
+    280
+   ],
+   "flags": {},
+   "order": 18,
+   "mode": 0,
+   "inputs": [
+    {
+     "localized_name": "images",
+     "name": "images",
+     "type": "IMAGE",
+     "link": 25
+    }
+   ],
+   "outputs": [],
+   "properties": {
+    "cnr_id": "comfy-core",
+    "ver": "0.39.2",
+    "Node name for S&R": "PreviewImage"
+   },
+   "widgets_values": [],
+   "title": "Crop preview"
+  },
+  {
+   "id": 19,
+   "type": "TextEncodeQwenImage21",
+   "pos": [
+    830,
+    1240
+   ],
+   "size": [
+    520,
+    440
+   ],
+   "flags": {},
+   "order": 19,
+   "mode": 0,
+   "inputs": [
+    {
+     "localized_name": "clip",
+     "name": "clip",
+     "type": "CLIP",
+     "link": 26
+    },
+    {
+     "localized_name": "image_1",
+     "name": "images.image_1",
+     "type": "IMAGE",
+     "link": 27,
+     "shape": 7
+    },
+    {
+     "localized_name": "vae",
+     "name": "vae",
+     "type": "VAE",
+     "link": 28,
+     "shape": 7
+    }
+   ],
+   "outputs": [
+    {
+     "localized_name": "positive",
+     "name": "positive",
+     "type": "CONDITIONING",
+     "links": [
+      30
+     ]
+    },
+    {
+     "localized_name": "negative",
+     "name": "negative",
+     "type": "CONDITIONING",
+     "links": [
+      31
+     ]
+    },
+    {
+     "localized_name": "latent",
+     "name": "latent",
+     "type": "LATENT",
+     "links": [
+      32
+     ]
+    }
+   ],
+   "properties": {
+    "cnr_id": "comfy-core",
+    "ver": "0.39.2",
+    "Node name for S&R": "TextEncodeQwenImage21"
+   },
+   "widgets_values": [
+    "Edit this image. Show only the loincloth as an isolated object on a plain white background: the braided rope belt with its knot and hanging rope ends, the fang pendant on the rope, the ragged patched dark brown leather front flap with its stitching, and the side panels, with exactly the same shape, size, colours, wear and frayed edges. Remove the ogre's body completely: no skin, no legs, no hips, no forearms, no leg wraps. The loincloth keeps the shape it has when worn, as if floating in place. Strict front view, the whole loincloth centred with an empty white margin around it. Same realistic 3D render style, soft even studio light, sharp detail.",
+    "",
+    1024
+   ]
+  },
+  {
+   "id": 20,
+   "type": "KSampler",
+   "pos": [
+    1380,
+    1240
+   ],
+   "size": [
+    280,
+    270
+   ],
+   "flags": {},
+   "order": 20,
+   "mode": 0,
+   "inputs": [
+    {
+     "localized_name": "model",
+     "name": "model",
+     "type": "MODEL",
+     "link": 29
+    },
+    {
+     "localized_name": "positive",
+     "name": "positive",
+     "type": "CONDITIONING",
+     "link": 30
+    },
+    {
+     "localized_name": "negative",
+     "name": "negative",
+     "type": "CONDITIONING",
+     "link": 31
+    },
+    {
+     "localized_name": "latent_image",
+     "name": "latent_image",
+     "type": "LATENT",
+     "link": 32
+    }
+   ],
+   "outputs": [
+    {
+     "localized_name": "LATENT",
+     "name": "LATENT",
+     "type": "LATENT",
+     "links": [
+      33
+     ]
+    }
+   ],
+   "properties": {
+    "cnr_id": "comfy-core",
+    "ver": "0.39.2",
+    "Node name for S&R": "KSampler"
+   },
+   "widgets_values": [
+    56,
+    "fixed",
+    25,
+    1,
+    "euler",
+    "simple",
+    1
+   ]
+  },
+  {
+   "id": 21,
+   "type": "VAEDecode",
+   "pos": [
+    1380,
+    1550
+   ],
+   "size": [
+    220,
+    50
+   ],
+   "flags": {},
+   "order": 21,
+   "mode": 0,
+   "inputs": [
+    {
+     "localized_name": "samples",
+     "name": "samples",
+     "type": "LATENT",
+     "link": 33
+    },
+    {
+     "localized_name": "vae",
+     "name": "vae",
+     "type": "VAE",
+     "link": 34
+    }
+   ],
+   "outputs": [
+    {
+     "localized_name": "IMAGE",
+     "name": "IMAGE",
+     "type": "IMAGE",
+     "links": [
+      35
+     ]
+    }
+   ],
+   "properties": {
+    "cnr_id": "comfy-core",
+    "ver": "0.39.2",
+    "Node name for S&R": "VAEDecode"
+   },
+   "widgets_values": []
+  },
+  {
+   "id": 22,
+   "type": "SaveImage",
+   "pos": [
+    1690,
+    1240
+   ],
+   "size": [
+    380,
+    440
+   ],
+   "flags": {},
+   "order": 22,
+   "mode": 0,
+   "inputs": [
+    {
+     "localized_name": "images",
+     "name": "images",
+     "type": "IMAGE",
+     "link": 35
+    }
+   ],
+   "outputs": [],
+   "properties": {
+    "cnr_id": "comfy-core",
+    "ver": "0.39.2",
+    "Node name for S&R": "SaveImage"
+   },
+   "widgets_values": [
+    "split_parts/loincloth"
+   ]
+  },
+  {
+   "id": 23,
+   "type": "ImageCrop",
+   "pos": [
+    540,
+    1800
+   ],
+   "size": [
+    260,
+    130
+   ],
+   "flags": {},
+   "order": 23,
+   "mode": 0,
+   "inputs": [
+    {
+     "localized_name": "image",
+     "name": "image",
+     "type": "IMAGE",
+     "link": 36
+    }
+   ],
+   "outputs": [
+    {
+     "localized_name": "IMAGE",
+     "name": "IMAGE",
+     "type": "IMAGE",
+     "links": [
+      37,
+      39
+     ]
+    }
+   ],
+   "properties": {
+    "cnr_id": "comfy-core",
+    "ver": "0.39.2",
+    "Node name for S&R": "ImageCrop"
+   },
+   "widgets_values": [
+    484,
+    760,
+    1180,
+    840
+   ],
+   "title": "Crop · Arm"
+  },
+  {
+   "id": 24,
+   "type": "PreviewImage",
+   "pos": [
+    540,
+    1960
+   ],
+   "size": [
+    260,
+    280
+   ],
+   "flags": {},
+   "order": 24,
+   "mode": 0,
+   "inputs": [
+    {
+     "localized_name": "images",
+     "name": "images",
+     "type": "IMAGE",
+     "link": 37
+    }
+   ],
+   "outputs": [],
+   "properties": {
+    "cnr_id": "comfy-core",
+    "ver": "0.39.2",
+    "Node name for S&R": "PreviewImage"
+   },
+   "widgets_values": [],
+   "title": "Crop preview"
+  },
+  {
+   "id": 25,
+   "type": "TextEncodeQwenImage21",
+   "pos": [
+    830,
+    1800
+   ],
+   "size": [
+    520,
+    440
+   ],
+   "flags": {},
+   "order": 25,
+   "mode": 0,
+   "inputs": [
+    {
+     "localized_name": "clip",
+     "name": "clip",
+     "type": "CLIP",
+     "link": 38
+    },
+    {
+     "localized_name": "image_1",
+     "name": "images.image_1",
+     "type": "IMAGE",
+     "link": 39,
+     "shape": 7
+    },
+    {
+     "localized_name": "vae",
+     "name": "vae",
+     "type": "VAE",
+     "link": 40,
+     "shape": 7
+    }
+   ],
+   "outputs": [
+    {
+     "localized_name": "positive",
+     "name": "positive",
+     "type": "CONDITIONING",
+     "links": [
+      42
+     ]
+    },
+    {
+     "localized_name": "negative",
+     "name": "negative",
+     "type": "CONDITIONING",
+     "links": [
+      43
+     ]
+    },
+    {
+     "localized_name": "latent",
+     "name": "latent",
+     "type": "LATENT",
+     "links": [
+      44
+     ]
+    }
+   ],
+   "properties": {
+    "cnr_id": "comfy-core",
+    "ver": "0.39.2",
+    "Node name for S&R": "TextEncodeQwenImage21"
+   },
+   "widgets_values": [
+    "Edit this image. Show only the lower arm of this ogre, isolated on a plain white background: the grey forearm from just above the leather wrap, the whole leather wrap with its frayed edges, braided rim and stitches exactly as in this image, and the bare grey hand below it. Keep the hand exactly as it is in this image: the same heavy ogre hand with thick fingers, the same relaxed curled pose, the back of the hand and the thumbnail facing the camera, the same knuckles and fingernails. Keep the forearm at exactly the same angle as in this image. The forearm ends at the top in a short clean cut just above the wrap. Remove the elbow, the upper arm, the body and everything else at the edges of the image completely. Keep the same size, the same orientation and exactly the same camera angle as in this image, no rotation, no mirroring. Same grey skin colour, same leather colours, same realistic 3D render style, soft even studio light, sharp high detail, empty white margin around the arm.",
+    "",
+    1024
+   ]
+  },
+  {
+   "id": 26,
+   "type": "KSampler",
+   "pos": [
+    1380,
+    1800
+   ],
+   "size": [
+    280,
+    270
+   ],
+   "flags": {},
+   "order": 26,
+   "mode": 0,
+   "inputs": [
+    {
+     "localized_name": "model",
+     "name": "model",
+     "type": "MODEL",
+     "link": 41
+    },
+    {
+     "localized_name": "positive",
+     "name": "positive",
+     "type": "CONDITIONING",
+     "link": 42
+    },
+    {
+     "localized_name": "negative",
+     "name": "negative",
+     "type": "CONDITIONING",
+     "link": 43
+    },
+    {
+     "localized_name": "latent_image",
+     "name": "latent_image",
+     "type": "LATENT",
+     "link": 44
+    }
+   ],
+   "outputs": [
+    {
+     "localized_name": "LATENT",
+     "name": "LATENT",
+     "type": "LATENT",
+     "links": [
+      45
+     ]
+    }
+   ],
+   "properties": {
+    "cnr_id": "comfy-core",
+    "ver": "0.39.2",
+    "Node name for S&R": "KSampler"
+   },
+   "widgets_values": [
+    56,
+    "fixed",
+    25,
+    1,
+    "euler",
+    "simple",
+    1
+   ]
+  },
+  {
+   "id": 27,
+   "type": "VAEDecode",
+   "pos": [
+    1380,
+    2110
+   ],
+   "size": [
+    220,
+    50
+   ],
+   "flags": {},
+   "order": 27,
+   "mode": 0,
+   "inputs": [
+    {
+     "localized_name": "samples",
+     "name": "samples",
+     "type": "LATENT",
+     "link": 45
+    },
+    {
+     "localized_name": "vae",
+     "name": "vae",
+     "type": "VAE",
+     "link": 46
+    }
+   ],
+   "outputs": [
+    {
+     "localized_name": "IMAGE",
+     "name": "IMAGE",
+     "type": "IMAGE",
+     "links": [
+      47
+     ]
+    }
+   ],
+   "properties": {
+    "cnr_id": "comfy-core",
+    "ver": "0.39.2",
+    "Node name for S&R": "VAEDecode"
+   },
+   "widgets_values": []
+  },
+  {
+   "id": 28,
+   "type": "SaveImage",
+   "pos": [
+    1690,
+    1800
+   ],
+   "size": [
+    380,
+    440
+   ],
+   "flags": {},
+   "order": 28,
+   "mode": 0,
+   "inputs": [
+    {
+     "localized_name": "images",
+     "name": "images",
+     "type": "IMAGE",
+     "link": 47
+    }
+   ],
+   "outputs": [],
+   "properties": {
+    "cnr_id": "comfy-core",
+    "ver": "0.39.2",
+    "Node name for S&R": "SaveImage"
+   },
+   "widgets_values": [
+    "split_parts/arm"
+   ]
+  },
+  {
+   "id": 29,
+   "type": "ImageCrop",
+   "pos": [
+    540,
+    2360
+   ],
+   "size": [
+    260,
+    130
+   ],
+   "flags": {},
+   "order": 29,
+   "mode": 0,
+   "inputs": [
+    {
+     "localized_name": "image",
+     "name": "image",
+     "type": "IMAGE",
+     "link": 48
+    }
+   ],
+   "outputs": [
+    {
+     "localized_name": "IMAGE",
+     "name": "IMAGE",
+     "type": "IMAGE",
+     "links": [
+      49,
+      51
+     ]
+    }
+   ],
+   "properties": {
+    "cnr_id": "comfy-core",
+    "ver": "0.39.2",
+    "Node name for S&R": "ImageCrop"
+   },
+   "widgets_values": [
+    580,
+    760,
+    210,
+    1680
+   ],
+   "title": "Crop · Leg"
+  },
+  {
+   "id": 30,
+   "type": "PreviewImage",
+   "pos": [
+    540,
+    2520
+   ],
+   "size": [
+    260,
+    280
+   ],
+   "flags": {},
+   "order": 30,
+   "mode": 0,
+   "inputs": [
+    {
+     "localized_name": "images",
+     "name": "images",
+     "type": "IMAGE",
+     "link": 49
+    }
+   ],
+   "outputs": [],
+   "properties": {
+    "cnr_id": "comfy-core",
+    "ver": "0.39.2",
+    "Node name for S&R": "PreviewImage"
+   },
+   "widgets_values": [],
+   "title": "Crop preview"
+  },
+  {
+   "id": 31,
+   "type": "TextEncodeQwenImage21",
+   "pos": [
+    830,
+    2360
+   ],
+   "size": [
+    520,
+    440
+   ],
+   "flags": {},
+   "order": 31,
+   "mode": 0,
+   "inputs": [
+    {
+     "localized_name": "clip",
+     "name": "clip",
+     "type": "CLIP",
+     "link": 50
+    },
+    {
+     "localized_name": "image_1",
+     "name": "images.image_1",
+     "type": "IMAGE",
+     "link": 51,
+     "shape": 7
+    },
+    {
+     "localized_name": "vae",
+     "name": "vae",
+     "type": "VAE",
+     "link": 52,
+     "shape": 7
+    }
+   ],
+   "outputs": [
+    {
+     "localized_name": "positive",
+     "name": "positive",
+     "type": "CONDITIONING",
+     "links": [
+      54
+     ]
+    },
+    {
+     "localized_name": "negative",
+     "name": "negative",
+     "type": "CONDITIONING",
+     "links": [
+      55
+     ]
+    },
+    {
+     "localized_name": "latent",
+     "name": "latent",
+     "type": "LATENT",
+     "links": [
+      56
+     ]
+    }
+   ],
+   "properties": {
+    "cnr_id": "comfy-core",
+    "ver": "0.39.2",
+    "Node name for S&R": "TextEncodeQwenImage21"
+   },
+   "widgets_values": [
+    "Edit this image. Show only the lower leg of this ogre, isolated on a plain white background: the grey shin from just above the leather leg wrap, the whole leather leg wrap with its frayed top edge, braided rim and stitches exactly as in this image, and the bare grey foot with its five toes and toenails in the same flat stance. The leg ends at the top in a short clean cut just above the wrap. Remove the knee, the thigh, the other leg and everything else at the edges of the image completely, and remove the shadow on the floor. Keep the same size, the same orientation and exactly the same camera angle as in this image, seen from the front with the toes pointing at the camera, no rotation. Same grey skin colour, same leather colours, same realistic 3D render style, soft even studio light, sharp high detail, empty white margin around the leg.",
+    "",
+    1024
+   ]
+  },
+  {
+   "id": 32,
+   "type": "KSampler",
+   "pos": [
+    1380,
+    2360
+   ],
+   "size": [
+    280,
+    270
+   ],
+   "flags": {},
+   "order": 32,
+   "mode": 0,
+   "inputs": [
+    {
+     "localized_name": "model",
+     "name": "model",
+     "type": "MODEL",
+     "link": 53
+    },
+    {
+     "localized_name": "positive",
+     "name": "positive",
+     "type": "CONDITIONING",
+     "link": 54
+    },
+    {
+     "localized_name": "negative",
+     "name": "negative",
+     "type": "CONDITIONING",
+     "link": 55
+    },
+    {
+     "localized_name": "latent_image",
+     "name": "latent_image",
+     "type": "LATENT",
+     "link": 56
+    }
+   ],
+   "outputs": [
+    {
+     "localized_name": "LATENT",
+     "name": "LATENT",
+     "type": "LATENT",
+     "links": [
+      57
+     ]
+    }
+   ],
+   "properties": {
+    "cnr_id": "comfy-core",
+    "ver": "0.39.2",
+    "Node name for S&R": "KSampler"
+   },
+   "widgets_values": [
+    56,
+    "fixed",
+    25,
+    1,
+    "euler",
+    "simple",
+    1
+   ]
+  },
+  {
+   "id": 33,
+   "type": "VAEDecode",
+   "pos": [
+    1380,
+    2670
+   ],
+   "size": [
+    220,
+    50
+   ],
+   "flags": {},
+   "order": 33,
+   "mode": 0,
+   "inputs": [
+    {
+     "localized_name": "samples",
+     "name": "samples",
+     "type": "LATENT",
+     "link": 57
+    },
+    {
+     "localized_name": "vae",
+     "name": "vae",
+     "type": "VAE",
+     "link": 58
+    }
+   ],
+   "outputs": [
+    {
+     "localized_name": "IMAGE",
+     "name": "IMAGE",
+     "type": "IMAGE",
+     "links": [
+      59
+     ]
+    }
+   ],
+   "properties": {
+    "cnr_id": "comfy-core",
+    "ver": "0.39.2",
+    "Node name for S&R": "VAEDecode"
+   },
+   "widgets_values": []
+  },
+  {
+   "id": 34,
+   "type": "SaveImage",
+   "pos": [
+    1690,
+    2360
+   ],
+   "size": [
+    380,
+    440
+   ],
+   "flags": {},
+   "order": 34,
+   "mode": 0,
+   "inputs": [
+    {
+     "localized_name": "images",
+     "name": "images",
+     "type": "IMAGE",
+     "link": 59
+    }
+   ],
+   "outputs": [],
+   "properties": {
+    "cnr_id": "comfy-core",
+    "ver": "0.39.2",
+    "Node name for S&R": "SaveImage"
+   },
+   "widgets_values": [
+    "split_parts/leg"
+   ]
+  }
+ ],
+ "links": [
+  [
+   1,
+   1,
+   0,
+   4,
+   0,
+   "MODEL"
+  ],
+  [
+   2,
+   2,
+   0,
+   7,
+   0,
+   "CLIP"
+  ],
+  [
+   3,
+   5,
+   0,
+   7,
+   1,
+   "IMAGE"
+  ],
+  [
+   4,
+   3,
+   0,
+   7,
+   2,
+   "VAE"
+  ],
+  [
+   5,
+   4,
+   0,
+   8,
+   0,
+   "MODEL"
+  ],
+  [
+   6,
+   7,
+   0,
+   8,
+   1,
+   "CONDITIONING"
+  ],
+  [
+   7,
+   7,
+   1,
+   8,
+   2,
+   "CONDITIONING"
+  ],
+  [
+   8,
+   7,
+   2,
+   8,
+   3,
+   "LATENT"
+  ],
+  [
+   9,
+   8,
+   0,
+   9,
+   0,
+   "LATENT"
+  ],
+  [
+   10,
+   3,
+   0,
+   9,
+   1,
+   "VAE"
+  ],
+  [
+   11,
+   9,
+   0,
+   10,
+   0,
+   "IMAGE"
+  ],
+  [
+   12,
+   5,
+   0,
+   11,
+   0,
+   "IMAGE"
+  ],
+  [
+   13,
+   11,
+   0,
+   12,
+   0,
+   "IMAGE"
+  ],
+  [
+   14,
+   2,
+   0,
+   13,
+   0,
+   "CLIP"
+  ],
+  [
+   15,
+   11,
+   0,
+   13,
+   1,
+   "IMAGE"
+  ],
+  [
+   16,
+   3,
+   0,
+   13,
+   2,
+   "VAE"
+  ],
+  [
+   17,
+   4,
+   0,
+   14,
+   0,
+   "MODEL"
+  ],
+  [
+   18,
+   13,
+   0,
+   14,
+   1,
+   "CONDITIONING"
+  ],
+  [
+   19,
+   13,
+   1,
+   14,
+   2,
+   "CONDITIONING"
+  ],
+  [
+   20,
+   13,
+   2,
+   14,
+   3,
+   "LATENT"
+  ],
+  [
+   21,
+   14,
+   0,
+   15,
+   0,
+   "LATENT"
+  ],
+  [
+   22,
+   3,
+   0,
+   15,
+   1,
+   "VAE"
+  ],
+  [
+   23,
+   15,
+   0,
+   16,
+   0,
+   "IMAGE"
+  ],
+  [
+   24,
+   5,
+   0,
+   17,
+   0,
+   "IMAGE"
+  ],
+  [
+   25,
+   17,
+   0,
+   18,
+   0,
+   "IMAGE"
+  ],
+  [
+   26,
+   2,
+   0,
+   19,
+   0,
+   "CLIP"
+  ],
+  [
+   27,
+   17,
+   0,
+   19,
+   1,
+   "IMAGE"
+  ],
+  [
+   28,
+   3,
+   0,
+   19,
+   2,
+   "VAE"
+  ],
+  [
+   29,
+   4,
+   0,
+   20,
+   0,
+   "MODEL"
+  ],
+  [
+   30,
+   19,
+   0,
+   20,
+   1,
+   "CONDITIONING"
+  ],
+  [
+   31,
+   19,
+   1,
+   20,
+   2,
+   "CONDITIONING"
+  ],
+  [
+   32,
+   19,
+   2,
+   20,
+   3,
+   "LATENT"
+  ],
+  [
+   33,
+   20,
+   0,
+   21,
+   0,
+   "LATENT"
+  ],
+  [
+   34,
+   3,
+   0,
+   21,
+   1,
+   "VAE"
+  ],
+  [
+   35,
+   21,
+   0,
+   22,
+   0,
+   "IMAGE"
+  ],
+  [
+   36,
+   5,
+   0,
+   23,
+   0,
+   "IMAGE"
+  ],
+  [
+   37,
+   23,
+   0,
+   24,
+   0,
+   "IMAGE"
+  ],
+  [
+   38,
+   2,
+   0,
+   25,
+   0,
+   "CLIP"
+  ],
+  [
+   39,
+   23,
+   0,
+   25,
+   1,
+   "IMAGE"
+  ],
+  [
+   40,
+   3,
+   0,
+   25,
+   2,
+   "VAE"
+  ],
+  [
+   41,
+   4,
+   0,
+   26,
+   0,
+   "MODEL"
+  ],
+  [
+   42,
+   25,
+   0,
+   26,
+   1,
+   "CONDITIONING"
+  ],
+  [
+   43,
+   25,
+   1,
+   26,
+   2,
+   "CONDITIONING"
+  ],
+  [
+   44,
+   25,
+   2,
+   26,
+   3,
+   "LATENT"
+  ],
+  [
+   45,
+   26,
+   0,
+   27,
+   0,
+   "LATENT"
+  ],
+  [
+   46,
+   3,
+   0,
+   27,
+   1,
+   "VAE"
+  ],
+  [
+   47,
+   27,
+   0,
+   28,
+   0,
+   "IMAGE"
+  ],
+  [
+   48,
+   5,
+   0,
+   29,
+   0,
+   "IMAGE"
+  ],
+  [
+   49,
+   29,
+   0,
+   30,
+   0,
+   "IMAGE"
+  ],
+  [
+   50,
+   2,
+   0,
+   31,
+   0,
+   "CLIP"
+  ],
+  [
+   51,
+   29,
+   0,
+   31,
+   1,
+   "IMAGE"
+  ],
+  [
+   52,
+   3,
+   0,
+   31,
+   2,
+   "VAE"
+  ],
+  [
+   53,
+   4,
+   0,
+   32,
+   0,
+   "MODEL"
+  ],
+  [
+   54,
+   31,
+   0,
+   32,
+   1,
+   "CONDITIONING"
+  ],
+  [
+   55,
+   31,
+   1,
+   32,
+   2,
+   "CONDITIONING"
+  ],
+  [
+   56,
+   31,
+   2,
+   32,
+   3,
+   "LATENT"
+  ],
+  [
+   57,
+   32,
+   0,
+   33,
+   0,
+   "LATENT"
+  ],
+  [
+   58,
+   3,
+   0,
+   33,
+   1,
+   "VAE"
+  ],
+  [
+   59,
+   33,
+   0,
+   34,
+   0,
+   "IMAGE"
+  ]
+ ],
+ "groups": [
+  {
+   "id": 1,
+   "title": "Models + input (shared)",
+   "bounding": [
+    20,
+    40,
+    470,
+    1740
+   ],
+   "color": "#444",
+   "font_size": 24,
+   "flags": {}
+  },
+  {
+   "id": 2,
+   "title": "1 · Body (full image, no crop)",
+   "bounding": [
+    520,
+    60,
+    1590,
+    530
+   ],
+   "color": "#3f789e",
+   "font_size": 24,
+   "flags": {}
+  },
+  {
+   "id": 3,
+   "title": "2 · Head with the whole beard",
+   "bounding": [
+    520,
+    620,
+    1590,
+    530
+   ],
+   "color": "#8A8",
+   "font_size": 24,
+   "flags": {}
+  },
+  {
+   "id": 4,
+   "title": "3 · Loincloth",
+   "bounding": [
+    520,
+    1180,
+    1590,
+    530
+   ],
+   "color": "#b06634",
+   "font_size": 24,
+   "flags": {}
+  },
+  {
+   "id": 5,
+   "title": "4 · Arm: forearm + bracer + hand",
+   "bounding": [
+    520,
+    1740,
+    1590,
+    530
+   ],
+   "color": "#a1309b",
+   "font_size": 24,
+   "flags": {}
+  },
+  {
+   "id": 6,
+   "title": "5 · Leg: shin + wrap + foot",
+   "bounding": [
+    520,
+    2300,
+    1590,
+    530
+   ],
+   "color": "#88A",
+   "font_size": 24,
+   "flags": {}
+  }
+ ],
+ "config": {},
+ "extra": {
+  "ds": {
+   "scale": 0.5,
+   "offset": [
+    40,
+    40
+   ]
+  }
+ },
+ "version": 0.4
+}

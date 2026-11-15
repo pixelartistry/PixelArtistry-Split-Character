@@ -15,6 +15,7 @@ character image ──► crop a part ──► Qwen Image 2.1 edit ──► is
 | Workflow | Does | Output |
 |---|---|---|
 | **PixelArtistry_07_Qwen21_Split_Character_Part** | Qwen Image 2.1 edit: isolates one part from a crop of your character, same camera and size | `output/split_parts/part_*.png` |
+| **PixelArtistry_07b_Qwen21_Split_All_Parts** | All parts in one run: load the full character once; **Image Crop** cuts head, loincloth, arm and leg with fixed boxes, the body stays whole, and one Qwen edit per part | `output/split_parts/{body,head,loincloth,arm,leg}_*.png` |
 | **PixelArtistry_08_Part_to_LowPoly_TRELLIS2_UltraTex** | One part image to a textured low-poly GLB with TRELLIS.2, set up for parts (resolution 1024, voxel 0.005) | `output/3d/PixelArtistry_part_final_*.glb` |
 
 Workflow 08 is [workflow 05 from PixelArtistry Animated Characters](https://github.com/pixelartistry/PixelArtistry-Animated-Characters) with the part settings below; it uses the same nodes and models.
@@ -38,13 +39,25 @@ Workflow 08 is [workflow 05 from PixelArtistry Animated Characters](https://gith
 ## Install
 
 1. **Code → Download ZIP** and unzip.
-2. Copy both JSONs from `workflows` into `ComfyUI\user\default\workflows\PixelArtistry`.
+2. Copy the JSONs from `workflows` into `ComfyUI\user\default\workflows\PixelArtistry`.
 3. Copy the images from `examples` into `ComfyUI\input` to try the example.
 4. In workflow 08, set the **Blender path** node once (forward slashes, e.g. `D:/Blender/blender.exe`) – the Animated Characters installer has the path if you need it.
 
 ## How to use
 
-### 1. Split the character (workflow 07)
+### 1. Split the character (workflow 07b or 07)
+
+**All parts at once (07b):** load the full character in **Load Image** (example: `source_cyclops.png`) and press **Run**. Each row crops one part with **Image Crop** (`width`, `height`, `x`, `y` in pixels of the source, top-left is 0, 0), shows the crop in a preview and runs the Qwen edit with that part's prompt. For your own character, change the four boxes and the prompts; mute a row with Ctrl+M to skip a part.
+
+| Part (example) | Image Crop: width, height, x, y | Qwen resolution |
+|---|---|---|
+| Body | no crop | 1536 |
+| Head with the whole beard | 600, 600, 530, 0 | 1024 |
+| Loincloth | 910, 1010, 380, 900 | 1024 |
+| Arm: forearm + bracer + hand | 484, 760, 1180, 840 | 1024 |
+| Leg: shin + wrap + foot | 580, 760, 210, 1680 | 1024 |
+
+**One part at a time (07):**
 
 1. Start from a full character image: straight front view, plain background, arms away from the body.
 2. **Crop one part** generously and load it in **Load Image** (example: `example_head_crop.png`). For the body, load the whole image and set the encoder's resolution to **1536**.
